@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import AppSidebar from './AppSidebar';
 import AppHeader from './AppHeader';
@@ -6,6 +6,11 @@ import { useAppStore } from '@/store/useAppStore';
 
 export default function AppLayout() {
   const sidebarOpen = useAppStore((s) => s.sidebarOpen);
+  const isAuthenticated = useAppStore((s) => s.isAuthenticated);
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
 
   return (
     <div className="min-h-screen bg-background">

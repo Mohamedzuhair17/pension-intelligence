@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   LayoutDashboard, MessageSquare, Calculator, User, Settings,
@@ -22,11 +22,13 @@ const adminItems = [
 
 export default function AppSidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { sidebarOpen, setSidebarOpen, setAuthenticated, setUser } = useAppStore();
 
   const handleLogout = () => {
     setAuthenticated(false);
     setUser(null);
+    navigate('/login');
   };
 
   return (
