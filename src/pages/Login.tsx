@@ -6,13 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAppStore, mockUser } from '@/store/useAppStore';
+import { t } from '@/i18n/translations';
 
 export default function LoginPage() {
   const [pran, setPran] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { setUser, setAuthenticated } = useAppStore();
+  const { setUser, setAuthenticated, language } = useAppStore();
   const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
@@ -42,7 +43,7 @@ export default function LoginPage() {
             AI-Powered NPS Assistant
           </h1>
           <p className="text-primary-foreground/70 text-lg leading-relaxed">
-            Your intelligent pension companion. Ask questions in your language, 
+            Your intelligent pension companion. Ask questions in your language,
             calculate projections, and manage your NPS account — all in one place.
           </p>
           <div className="flex items-center justify-center gap-6 mt-10 text-primary-foreground/50 text-sm">
@@ -68,15 +69,15 @@ export default function LoginPage() {
             <span className="font-display font-bold text-xl text-foreground">NPS Assistant</span>
           </div>
 
-          <h2 className="font-display text-2xl font-bold text-foreground mb-1">Welcome back</h2>
-          <p className="text-muted-foreground mb-8">Sign in to your NPS account</p>
+          <h2 className="font-display text-2xl font-bold text-foreground mb-1">{t('welcomeBackAuth', language)}</h2>
+          <p className="text-muted-foreground mb-8">{t('signInToAccount', language)}</p>
 
           <form onSubmit={handleLogin} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="pran">PRAN / Account Number</Label>
+              <Label htmlFor="pran">{t('pranAccountNumber', language)}</Label>
               <Input
                 id="pran"
-                placeholder="Enter your 12-digit PRAN"
+                placeholder={t('enterPran', language)}
                 value={pran}
                 onChange={(e) => setPran(e.target.value)}
                 className="h-11"
@@ -85,16 +86,16 @@ export default function LoginPage() {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{t('password', language)}</Label>
                 <Link to="/forgot-password" className="text-xs text-accent hover:underline">
-                  Forgot password?
+                  {t('forgotPassword', language)}
                 </Link>
               </div>
               <div className="relative">
                 <Input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter your password"
+                  placeholder={t('enterPassword', language)}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="h-11 pr-10"
@@ -110,14 +111,14 @@ export default function LoginPage() {
             </div>
 
             <Button type="submit" className="w-full h-11 gradient-primary text-primary-foreground font-semibold" disabled={loading}>
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? t('signingIn', language) : t('signIn', language)}
             </Button>
           </form>
 
           <p className="text-center text-sm text-muted-foreground mt-6">
-            Don't have an account?{' '}
+            {t('noAccount', language)}{' '}
             <Link to="/register" className="text-accent font-medium hover:underline">
-              Create account
+              {t('createAccount', language)}
             </Link>
           </p>
         </motion.div>

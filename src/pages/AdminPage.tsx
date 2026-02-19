@@ -1,10 +1,12 @@
 import { motion } from 'framer-motion';
 import {
-  Users, MessageSquare, TrendingUp, Clock, BarChart3,
-  Shield, Settings, Activity
+  Users, MessageSquare, TrendingUp, Clock,
+  Shield, Activity
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useAppStore } from '@/store/useAppStore';
+import { t } from '@/i18n/translations';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, LineChart, Line
@@ -37,27 +39,29 @@ const recentUsers = [
 ];
 
 export default function AdminPage() {
+  const language = useAppStore((s) => s.language);
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-7xl space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-display text-2xl font-bold text-foreground flex items-center gap-2">
-            <Shield className="w-6 h-6 text-accent" /> Admin Dashboard
+            <Shield className="w-6 h-6 text-accent" /> {t('adminDashboard', language)}
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">System overview and management</p>
+          <p className="text-sm text-muted-foreground mt-1">{t('systemOverview', language)}</p>
         </div>
         <Badge className="bg-emerald/10 text-emerald border-0">
-          <Activity className="w-3 h-3 mr-1" /> All Systems Normal
+          <Activity className="w-3 h-3 mr-1" /> {t('allSystemsNormal', language)}
         </Badge>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Total Users', value: '4,128', change: '+12%', icon: Users, color: 'bg-saffron-light text-saffron' },
-          { label: 'Active Conversations', value: '342', change: 'Today', icon: MessageSquare, color: 'bg-emerald-light text-emerald' },
-          { label: 'Avg Response Time', value: '2.4s', change: '-0.3s', icon: Clock, color: 'bg-sky-light text-sky' },
-          { label: 'CSAT Score', value: '4.6/5', change: '+0.2', icon: TrendingUp, color: 'bg-amber-light text-amber' },
+          { label: t('totalUsers', language), value: '4,128', change: '+12%', icon: Users, color: 'bg-saffron-light text-saffron' },
+          { label: t('activeConversations', language), value: '342', change: 'Today', icon: MessageSquare, color: 'bg-emerald-light text-emerald' },
+          { label: t('avgResponseTime', language), value: '2.4s', change: '-0.3s', icon: Clock, color: 'bg-sky-light text-sky' },
+          { label: t('csatScore', language), value: '4.6/5', change: '+0.2', icon: TrendingUp, color: 'bg-amber-light text-amber' },
         ].map((stat) => (
           <Card key={stat.label} className="shadow-card">
             <CardContent className="p-5">
@@ -78,7 +82,7 @@ export default function AdminPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card className="shadow-card">
           <CardHeader className="pb-2">
-            <CardTitle className="font-display text-base">User Growth</CardTitle>
+            <CardTitle className="font-display text-base">{t('userGrowth', language)}</CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={250}>
@@ -95,7 +99,7 @@ export default function AdminPage() {
 
         <Card className="shadow-card">
           <CardHeader className="pb-2">
-            <CardTitle className="font-display text-base">Daily Chat Volume</CardTitle>
+            <CardTitle className="font-display text-base">{t('dailyChatVolume', language)}</CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={250}>
@@ -114,17 +118,17 @@ export default function AdminPage() {
       {/* Recent Users */}
       <Card className="shadow-card">
         <CardHeader className="pb-2">
-          <CardTitle className="font-display text-base">Recent Registrations</CardTitle>
+          <CardTitle className="font-display text-base">{t('recentRegistrations', language)}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border">
-                  <th className="text-left p-3 text-muted-foreground font-medium">Name</th>
-                  <th className="text-left p-3 text-muted-foreground font-medium">Email</th>
-                  <th className="text-left p-3 text-muted-foreground font-medium">Status</th>
-                  <th className="text-left p-3 text-muted-foreground font-medium">Joined</th>
+                  <th className="text-left p-3 text-muted-foreground font-medium">{t('name', language)}</th>
+                  <th className="text-left p-3 text-muted-foreground font-medium">{t('email', language)}</th>
+                  <th className="text-left p-3 text-muted-foreground font-medium">{t('status', language)}</th>
+                  <th className="text-left p-3 text-muted-foreground font-medium">{t('joined', language)}</th>
                 </tr>
               </thead>
               <tbody>

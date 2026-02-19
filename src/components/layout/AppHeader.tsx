@@ -1,5 +1,6 @@
 import { Bell, Globe, Search } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
+import { t } from '@/i18n/translations';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,17 +26,22 @@ export default function AppHeader() {
   const { user, notifications, language, setLanguage, markNotificationRead } = useAppStore();
   const unreadCount = notifications.filter((n) => !n.read).length;
 
+  const handleSetLanguage = (code: string) => {
+    setLanguage(code);
+    localStorage.setItem('app-language', code);
+  };
+
   return (
     <header className="h-16 border-b border-border bg-card flex items-center justify-between px-6 sticky top-0 z-30">
       <div className="flex items-center gap-4">
         <h2 className="font-display font-semibold text-foreground text-lg">
-          Hello, {user?.fullName?.split(' ')[0] || 'User'} 👋
+          {t('hello', language)}, {user?.fullName?.split(' ')[0] || 'User'} 👋
         </h2>
       </div>
 
       <div className="flex items-center gap-2">
         {/* Search */}
-        <button className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors">
+        <button className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors" aria-label={t('search', language)}>
           <Search className="w-5 h-5" />
         </button>
 
@@ -51,7 +57,11 @@ export default function AppHeader() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-44">
             {languages.map((lang) => (
-              <DropdownMenuItem key={lang.code} onClick={() => setLanguage(lang.code)}>
+              <DropdownMenuItem
+                key={lang.code}
+                onClick={() => handleSetLanguage(lang.code)}
+                className={language === lang.code ? 'bg-accent/10 text-accent font-medium' : ''}
+              >
                 {lang.label}
               </DropdownMenuItem>
             ))}
@@ -61,7 +71,7 @@ export default function AppHeader() {
         {/* Notifications */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors relative">
+            <button className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors relative" aria-label={t('notifications', language)}>
               <Bell className="w-5 h-5" />
               {unreadCount > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-accent text-accent-foreground text-[10px] font-bold flex items-center justify-center">
@@ -72,7 +82,7 @@ export default function AppHeader() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-80">
             <div className="px-3 py-2 border-b border-border">
-              <span className="font-display font-semibold text-sm">Notifications</span>
+              <span className="font-display font-semibold text-sm">{t('notifications', language)}</span>
             </div>
             {notifications.slice(0, 5).map((n) => (
               <DropdownMenuItem key={n.id} onClick={() => markNotificationRead(n.id)} className="flex flex-col items-start gap-0.5 py-2.5">

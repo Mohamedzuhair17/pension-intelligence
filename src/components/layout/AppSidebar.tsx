@@ -5,25 +5,26 @@ import {
   HelpCircle, Shield, LogOut, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
+import { t } from '@/i18n/translations';
 import { cn } from '@/lib/utils';
-
-const navItems = [
-  { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { path: '/assistant', label: 'AI Assistant', icon: MessageSquare },
-  { path: '/calculator', label: 'Pension Calculator', icon: Calculator },
-  { path: '/profile', label: 'My Profile', icon: User },
-  { path: '/settings', label: 'Settings', icon: Settings },
-  { path: '/help', label: 'Help & FAQ', icon: HelpCircle },
-];
-
-const adminItems = [
-  { path: '/admin', label: 'Admin Panel', icon: Shield },
-];
 
 export default function AppSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { sidebarOpen, setSidebarOpen, setAuthenticated, setUser } = useAppStore();
+  const { sidebarOpen, setSidebarOpen, setAuthenticated, setUser, language } = useAppStore();
+
+  const navItems = [
+    { path: '/dashboard', label: t('dashboard', language), icon: LayoutDashboard },
+    { path: '/assistant', label: t('aiAssistant', language), icon: MessageSquare },
+    { path: '/calculator', label: t('pensionCalculator', language), icon: Calculator },
+    { path: '/profile', label: t('myProfile', language), icon: User },
+    { path: '/settings', label: t('settings', language), icon: Settings },
+    { path: '/help', label: t('helpFaq', language), icon: HelpCircle },
+  ];
+
+  const adminItems = [
+    { path: '/admin', label: t('adminPanel', language), icon: Shield },
+  ];
 
   const handleLogout = () => {
     setAuthenticated(false);
@@ -78,7 +79,7 @@ export default function AppSidebar() {
         <div className="pt-4 pb-2 px-3">
           {sidebarOpen && (
             <span className="text-[10px] uppercase tracking-widest text-sidebar-foreground/40 font-medium">
-              Admin
+              {t('admin', language)}
             </span>
           )}
         </div>
@@ -110,7 +111,7 @@ export default function AppSidebar() {
           className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-sm text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 w-full"
         >
           <LogOut className="w-5 h-5 shrink-0" />
-          {sidebarOpen && <span>Logout</span>}
+          {sidebarOpen && <span>{t('logout', language)}</span>}
         </button>
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
