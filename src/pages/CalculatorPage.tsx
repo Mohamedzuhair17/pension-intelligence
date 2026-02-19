@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
+import { useAppStore } from '@/store/useAppStore';
+import { t } from '@/i18n/translations';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, PieChart, Pie, Cell
@@ -38,6 +40,7 @@ function formatINR(n: number) {
 
 export default function CalculatorPage() {
   const [inputs, setInputs] = useState<CalculatorInput>(defaults);
+  const language = useAppStore((s) => s.language);
 
   const update = (key: keyof CalculatorInput, value: number) => {
     setInputs((prev) => ({ ...prev, [key]: value }));
@@ -83,26 +86,26 @@ export default function CalculatorPage() {
   }, [inputs]);
 
   const allocationData = [
-    { name: 'Equity', value: inputs.equityAllocation },
-    { name: 'Corporate Bonds', value: inputs.corporateBondAllocation },
-    { name: 'Govt Securities', value: inputs.govSecAllocation },
+    { name: t('equity', language), value: inputs.equityAllocation },
+    { name: t('corporateBonds', language), value: inputs.corporateBondAllocation },
+    { name: t('govSecurities', language), value: inputs.govSecAllocation },
   ];
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-7xl space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h1 className="font-display text-2xl font-bold text-foreground flex items-center gap-2">
-            <CalcIcon className="w-6 h-6 text-accent" /> Pension Calculator
+            <CalcIcon className="w-6 h-6 text-accent" /> {t('pensionCalculator', language)}
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">Estimate your NPS corpus and monthly pension at retirement</p>
+          <p className="text-sm text-muted-foreground mt-1">{t('estimateCorpus', language)}</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={() => setInputs(defaults)}>
-            <RotateCcw className="w-4 h-4 mr-1" /> Reset
+            <RotateCcw className="w-4 h-4 mr-1" /> {t('reset', language)}
           </Button>
-          <Button variant="outline" size="sm"><Download className="w-4 h-4 mr-1" /> PDF</Button>
-          <Button variant="outline" size="sm"><Share2 className="w-4 h-4 mr-1" /> Share</Button>
+          <Button variant="outline" size="sm"><Download className="w-4 h-4 mr-1" /> {t('pdf', language)}</Button>
+          <Button variant="outline" size="sm"><Share2 className="w-4 h-4 mr-1" /> {t('share', language)}</Button>
         </div>
       </div>
 
@@ -111,32 +114,32 @@ export default function CalculatorPage() {
         <div className="lg:col-span-1 space-y-4">
           <Card className="shadow-card">
             <CardHeader className="pb-3">
-              <CardTitle className="font-display text-sm">Personal Details</CardTitle>
+              <CardTitle className="font-display text-sm">{t('personalDetails', language)}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-5">
-              <SliderField label="Current Age" value={inputs.age} min={18} max={65} suffix=" years" onChange={(v) => update('age', v)} />
-              <SliderField label="Retirement Age" value={inputs.retirementAge} min={inputs.age + 1} max={70} suffix=" years" onChange={(v) => update('retirementAge', v)} />
+              <SliderField label={t('currentAge', language)} value={inputs.age} min={18} max={65} suffix=" years" onChange={(v) => update('age', v)} />
+              <SliderField label={t('retirementAge', language)} value={inputs.retirementAge} min={inputs.age + 1} max={70} suffix=" years" onChange={(v) => update('retirementAge', v)} />
               <div className="space-y-2">
-                <Label className="text-xs">Annual Income</Label>
+                <Label className="text-xs">{t('annualIncome', language)}</Label>
                 <Input type="number" value={inputs.currentIncome} onChange={(e) => update('currentIncome', +e.target.value)} className="h-9" />
               </div>
-              <SliderField label="Income Growth" value={inputs.incomeGrowth} min={0} max={15} suffix="%" step={0.5} onChange={(v) => update('incomeGrowth', v)} />
+              <SliderField label={t('incomeGrowth', language)} value={inputs.incomeGrowth} min={0} max={15} suffix="%" step={0.5} onChange={(v) => update('incomeGrowth', v)} />
             </CardContent>
           </Card>
 
           <Card className="shadow-card">
             <CardHeader className="pb-3">
-              <CardTitle className="font-display text-sm">NPS Contribution</CardTitle>
+              <CardTitle className="font-display text-sm">{t('npsContribution', language)}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-5">
               <div className="space-y-2">
-                <Label className="text-xs">Annual Contribution (₹)</Label>
+                <Label className="text-xs">{t('annualContribution', language)}</Label>
                 <Input type="number" value={inputs.annualContribution} onChange={(e) => update('annualContribution', +e.target.value)} className="h-9" />
               </div>
-              <SliderField label="Annual Increase" value={inputs.contributionIncrease} min={0} max={15} suffix="%" step={0.5} onChange={(v) => update('contributionIncrease', v)} />
-              <SliderField label="Expected Return" value={inputs.expectedReturn} min={4} max={14} suffix="%" step={0.5} onChange={(v) => update('expectedReturn', v)} />
+              <SliderField label={t('annualIncrease', language)} value={inputs.contributionIncrease} min={0} max={15} suffix="%" step={0.5} onChange={(v) => update('contributionIncrease', v)} />
+              <SliderField label={t('expectedReturn', language)} value={inputs.expectedReturn} min={4} max={14} suffix="%" step={0.5} onChange={(v) => update('expectedReturn', v)} />
               <div className="space-y-2">
-                <Label className="text-xs">Current NPS Balance (₹)</Label>
+                <Label className="text-xs">{t('currentNpsBalance', language)}</Label>
                 <Input type="number" value={inputs.currentBalance} onChange={(e) => update('currentBalance', +e.target.value)} className="h-9" />
               </div>
             </CardContent>
@@ -144,13 +147,13 @@ export default function CalculatorPage() {
 
           <Card className="shadow-card">
             <CardHeader className="pb-3">
-              <CardTitle className="font-display text-sm">Asset Allocation</CardTitle>
+              <CardTitle className="font-display text-sm">{t('assetAllocation', language)}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-5">
-              <SliderField label="Equity (E)" value={inputs.equityAllocation} min={0} max={75} suffix="%" onChange={(v) => update('equityAllocation', v)} />
-              <SliderField label="Corporate Bonds (C)" value={inputs.corporateBondAllocation} min={0} max={100} suffix="%" onChange={(v) => update('corporateBondAllocation', v)} />
-              <SliderField label="Govt Securities (G)" value={inputs.govSecAllocation} min={0} max={100} suffix="%" onChange={(v) => update('govSecAllocation', v)} />
-              <SliderField label="Annuity %" value={inputs.annuityPercentage} min={40} max={100} suffix="%" onChange={(v) => update('annuityPercentage', v)} />
+              <SliderField label={t('equity', language)} value={inputs.equityAllocation} min={0} max={75} suffix="%" onChange={(v) => update('equityAllocation', v)} />
+              <SliderField label={t('corporateBonds', language)} value={inputs.corporateBondAllocation} min={0} max={100} suffix="%" onChange={(v) => update('corporateBondAllocation', v)} />
+              <SliderField label={t('govSecurities', language)} value={inputs.govSecAllocation} min={0} max={100} suffix="%" onChange={(v) => update('govSecAllocation', v)} />
+              <SliderField label={t('annuityPct', language)} value={inputs.annuityPercentage} min={40} max={100} suffix="%" onChange={(v) => update('annuityPercentage', v)} />
               <div className="h-40">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
@@ -172,12 +175,12 @@ export default function CalculatorPage() {
           {/* Summary Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {[
-              { label: 'Projected Corpus', value: formatINR(results.projectedCorpus), color: 'bg-saffron-light text-saffron' },
-              { label: 'Monthly Pension', value: formatINR(results.monthlyPension), color: 'bg-emerald-light text-emerald' },
-              { label: 'Lump Sum', value: formatINR(results.lumpSum), color: 'bg-sky-light text-sky' },
-              { label: 'Total Contributions', value: formatINR(results.totalContributions), color: 'bg-amber-light text-amber' },
-              { label: 'Total Returns', value: formatINR(results.totalReturns), color: 'bg-saffron-light text-saffron' },
-              { label: 'Years to Retire', value: `${inputs.retirementAge - inputs.age} yrs`, color: 'bg-secondary text-foreground' },
+              { label: t('projectedCorpus', language), value: formatINR(results.projectedCorpus) },
+              { label: t('monthlyPension', language), value: formatINR(results.monthlyPension) },
+              { label: t('lumpSum', language), value: formatINR(results.lumpSum) },
+              { label: t('totalContributions', language), value: formatINR(results.totalContributions) },
+              { label: t('totalReturns', language), value: formatINR(results.totalReturns) },
+              { label: t('yearsToRetire', language), value: `${inputs.retirementAge - inputs.age} yrs` },
             ].map((s) => (
               <Card key={s.label} className="shadow-card">
                 <CardContent className="p-4">
@@ -191,7 +194,7 @@ export default function CalculatorPage() {
           {/* Corpus Growth Chart */}
           <Card className="shadow-card">
             <CardHeader className="pb-2">
-              <CardTitle className="font-display text-sm">Corpus Growth Over Time</CardTitle>
+              <CardTitle className="font-display text-sm">{t('corpusGrowthOverTime', language)}</CardTitle>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
@@ -203,7 +206,7 @@ export default function CalculatorPage() {
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(220, 16%, 90%)" />
-                  <XAxis dataKey="age" tick={{ fontSize: 11 }} stroke="hsl(220, 10%, 46%)" label={{ value: 'Age', position: 'insideBottom', offset: -5, fontSize: 11 }} />
+                  <XAxis dataKey="age" tick={{ fontSize: 11 }} stroke="hsl(220, 10%, 46%)" label={{ value: t('age', language), position: 'insideBottom', offset: -5, fontSize: 11 }} />
                   <YAxis tick={{ fontSize: 11 }} stroke="hsl(220, 10%, 46%)" tickFormatter={(v) => formatINR(v)} />
                   <Tooltip formatter={(v: number) => formatINR(v)} />
                   <Area type="monotone" dataKey="corpus" stroke="hsl(222, 60%, 18%)" fill="url(#corpusGrad)" strokeWidth={2} />
@@ -215,18 +218,18 @@ export default function CalculatorPage() {
           {/* Projection Table */}
           <Card className="shadow-card">
             <CardHeader className="pb-2">
-              <CardTitle className="font-display text-sm">Year-wise Projection</CardTitle>
+              <CardTitle className="font-display text-sm">{t('yearWiseProjection', language)}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto max-h-64 overflow-y-auto">
                 <table className="w-full text-xs">
                   <thead className="sticky top-0 bg-card">
                     <tr className="border-b border-border">
-                      <th className="text-left p-2 text-muted-foreground font-medium">Age</th>
-                      <th className="text-right p-2 text-muted-foreground font-medium">Contribution</th>
-                      <th className="text-right p-2 text-muted-foreground font-medium">Returns</th>
-                      <th className="text-right p-2 text-muted-foreground font-medium">Corpus</th>
-                      <th className="text-right p-2 text-muted-foreground font-medium">Tax Benefit</th>
+                      <th className="text-left p-2 text-muted-foreground font-medium">{t('age', language)}</th>
+                      <th className="text-right p-2 text-muted-foreground font-medium">{t('contribution', language)}</th>
+                      <th className="text-right p-2 text-muted-foreground font-medium">{t('returns', language)}</th>
+                      <th className="text-right p-2 text-muted-foreground font-medium">{t('corpus', language)}</th>
+                      <th className="text-right p-2 text-muted-foreground font-medium">{t('taxBenefit', language)}</th>
                     </tr>
                   </thead>
                   <tbody>

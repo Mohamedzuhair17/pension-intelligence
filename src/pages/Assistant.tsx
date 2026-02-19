@@ -7,6 +7,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAppStore } from '@/store/useAppStore';
+import { t } from '@/i18n/translations';
 import type { Message } from '@/types';
 
 const suggestedQuestions = [
@@ -30,7 +31,7 @@ Would you like me to calculate your specific tax savings based on your contribut
 };
 
 export default function AssistantPage() {
-  const { conversations, currentConversation, addMessage, clearConversation } = useAppStore();
+  const { conversations, currentConversation, addMessage, clearConversation, language } = useAppStore();
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [showHistory, setShowHistory] = useState(true);
@@ -89,14 +90,14 @@ export default function AssistantPage() {
           >
             <div className="p-4 border-b border-border">
               <Button onClick={() => { clearConversation(); }} size="sm" className="w-full gradient-primary text-primary-foreground">
-                <Plus className="w-4 h-4 mr-1.5" /> New Chat
+                <Plus className="w-4 h-4 mr-1.5" /> {t('newChat', language)}
               </Button>
             </div>
             <div className="p-3">
               <div className="relative">
                 <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
-                  placeholder="Search chats..."
+                  placeholder={t('searchChats', language)}
                   className="w-full pl-9 pr-3 py-2 text-sm rounded-lg bg-secondary border-0 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                 />
               </div>
@@ -132,14 +133,14 @@ export default function AssistantPage() {
               <Bot className="w-5 h-5 text-accent-foreground" />
             </div>
             <div>
-              <h3 className="font-display font-semibold text-sm text-foreground">NPS AI Assistant</h3>
+              <h3 className="font-display font-semibold text-sm text-foreground">{t('npsAIAssistant', language)}</h3>
               <span className="text-[11px] text-emerald flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald animate-pulse-soft" /> Online
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald animate-pulse-soft" /> {t('online', language)}
               </span>
             </div>
           </div>
           <Badge variant="secondary" className="text-[10px]">
-            <Sparkles className="w-3 h-3 mr-1" /> AI Powered
+            <Sparkles className="w-3 h-3 mr-1" /> {t('aiPowered', language)}
           </Badge>
         </div>
 
@@ -150,10 +151,9 @@ export default function AssistantPage() {
               <div className="w-16 h-16 rounded-2xl gradient-accent flex items-center justify-center mb-4">
                 <Bot className="w-8 h-8 text-accent-foreground" />
               </div>
-              <h3 className="font-display text-xl font-bold text-foreground mb-2">How can I help you today?</h3>
+              <h3 className="font-display text-xl font-bold text-foreground mb-2">{t('howCanIHelp', language)}</h3>
               <p className="text-muted-foreground text-sm mb-6 max-w-md">
-                Ask me anything about NPS — contributions, withdrawals, tax benefits, fund allocation, and more.
-                I support Hindi, Tamil, Telugu, and 10+ Indian languages.
+                {t('askAnything', language)}
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full max-w-lg">
                 {suggestedQuestions.map((q) => (
@@ -206,7 +206,7 @@ export default function AssistantPage() {
                 )}
                 {msg.sources && msg.sources.length > 0 && (
                   <div className="mt-2 pt-2 border-t border-border/50">
-                    <span className="text-[10px] text-muted-foreground font-medium">Sources:</span>
+                    <span className="text-[10px] text-muted-foreground font-medium">{t('sources', language)}:</span>
                     {msg.sources.map((src, i) => (
                       <span key={i} className="text-[10px] text-accent ml-1 cursor-pointer hover:underline">{src}</span>
                     ))}
@@ -247,7 +247,7 @@ export default function AssistantPage() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Ask about NPS, contributions, tax benefits..."
+                placeholder={t('askAboutNps', language)}
                 rows={1}
                 className="w-full resize-none rounded-xl border border-border bg-background px-4 py-3 pr-12 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
               />

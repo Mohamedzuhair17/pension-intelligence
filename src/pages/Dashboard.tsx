@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAppStore } from '@/store/useAppStore';
+import { t } from '@/i18n/translations';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, AreaChart, Area
@@ -29,13 +30,6 @@ const corpusData = [
   { year: '2025', corpus: 520000 },
 ];
 
-const quickActions = [
-  { label: 'Ask AI Assistant', icon: MessageSquare, path: '/assistant', color: 'bg-saffron-light text-saffron' },
-  { label: 'Calculate Pension', icon: Calculator, path: '/calculator', color: 'bg-emerald-light text-emerald' },
-  { label: 'Tax Documents', icon: Download, path: '/documents', color: 'bg-sky-light text-sky' },
-  { label: 'Account Statement', icon: FileText, path: '/documents', color: 'bg-amber-light text-amber' },
-];
-
 const recentChats = [
   { title: 'Tax benefits under NPS', time: '2 hours ago', snippet: 'You can claim deductions under Section 80CCD...' },
   { title: 'Withdrawal rules for Tier I', time: 'Yesterday', snippet: 'Partial withdrawal is allowed after 3 years...' },
@@ -49,6 +43,14 @@ const item = {
 
 export default function DashboardPage() {
   const user = useAppStore((s) => s.user);
+  const language = useAppStore((s) => s.language);
+
+  const quickActions = [
+    { label: t('askAIAssistant', language), icon: MessageSquare, path: '/assistant', color: 'bg-saffron-light text-saffron' },
+    { label: t('calculatePension', language), icon: Calculator, path: '/calculator', color: 'bg-emerald-light text-emerald' },
+    { label: t('taxDocuments', language), icon: Download, path: '/documents', color: 'bg-sky-light text-sky' },
+    { label: t('accountStatement', language), icon: FileText, path: '/documents', color: 'bg-amber-light text-amber' },
+  ];
 
   return (
     <motion.div
@@ -71,21 +73,21 @@ export default function DashboardPage() {
                 </Badge>
               </div>
               <h1 className="font-display text-2xl sm:text-3xl font-bold text-primary-foreground mb-1">
-                Welcome back, {user?.fullName?.split(' ')[0] || 'User'}
+                {t('welcomeBack', language)}, {user?.fullName?.split(' ')[0] || 'User'}
               </h1>
               <p className="text-primary-foreground/60 text-sm">
-                Your NPS account is in good health. Keep contributing to secure your retirement.
+                {t('accountHealthMsg', language)}
               </p>
             </div>
             <div className="flex gap-2">
               <Link to="/assistant">
                 <Button size="sm" className="gradient-accent text-accent-foreground font-semibold shadow-lg">
-                  <MessageSquare className="w-4 h-4 mr-1.5" /> Ask AI
+                  <MessageSquare className="w-4 h-4 mr-1.5" /> {t('askAI', language)}
                 </Button>
               </Link>
               <Link to="/calculator">
                 <Button size="sm" variant="outline" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10">
-                  <Calculator className="w-4 h-4 mr-1.5" /> Calculate
+                  <Calculator className="w-4 h-4 mr-1.5" /> {t('calculate', language)}
                 </Button>
               </Link>
             </div>
@@ -96,10 +98,10 @@ export default function DashboardPage() {
       {/* Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Total Corpus', value: '₹5,20,000', change: '+12.4%', icon: PiggyBank, colorClass: 'bg-saffron-light text-saffron' },
-          { label: 'This Year Contribution', value: '₹37,500', change: '₹62,500 left', icon: Wallet, colorClass: 'bg-emerald-light text-emerald' },
-          { label: 'Tax Saved (FY25)', value: '₹15,000', change: 'Sec 80CCD', icon: IndianRupee, colorClass: 'bg-sky-light text-sky' },
-          { label: 'Est. Monthly Pension', value: '₹28,500', change: 'at age 60', icon: TrendingUp, colorClass: 'bg-amber-light text-amber' },
+          { label: t('totalCorpus', language), value: '₹5,20,000', change: '+12.4%', icon: PiggyBank, colorClass: 'bg-saffron-light text-saffron' },
+          { label: t('thisYearContribution', language), value: '₹37,500', change: '₹62,500 left', icon: Wallet, colorClass: 'bg-emerald-light text-emerald' },
+          { label: t('taxSaved', language), value: '₹15,000', change: 'Sec 80CCD', icon: IndianRupee, colorClass: 'bg-sky-light text-sky' },
+          { label: t('estMonthlyPension', language), value: '₹28,500', change: 'at age 60', icon: TrendingUp, colorClass: 'bg-amber-light text-amber' },
         ].map((stat) => (
           <motion.div key={stat.label} variants={item}>
             <Card className="shadow-card hover:shadow-elevated transition-shadow">
@@ -123,7 +125,7 @@ export default function DashboardPage() {
         <motion.div variants={item}>
           <Card className="shadow-card">
             <CardHeader className="pb-2">
-              <CardTitle className="font-display text-base">Monthly Contributions</CardTitle>
+              <CardTitle className="font-display text-base">{t('monthlyContributions', language)}</CardTitle>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={220}>
@@ -148,7 +150,7 @@ export default function DashboardPage() {
         <motion.div variants={item}>
           <Card className="shadow-card">
             <CardHeader className="pb-2">
-              <CardTitle className="font-display text-base">Corpus Growth</CardTitle>
+              <CardTitle className="font-display text-base">{t('corpusGrowth', language)}</CardTitle>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={220}>
@@ -170,7 +172,7 @@ export default function DashboardPage() {
         <motion.div variants={item} className="lg:col-span-1">
           <Card className="shadow-card h-full">
             <CardHeader className="pb-3">
-              <CardTitle className="font-display text-base">Quick Actions</CardTitle>
+              <CardTitle className="font-display text-base">{t('quickActions', language)}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               {quickActions.map((action) => (
@@ -192,8 +194,8 @@ export default function DashboardPage() {
           <Card className="shadow-card h-full">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="font-display text-base">Recent Conversations</CardTitle>
-                <Link to="/assistant" className="text-xs text-accent hover:underline">View all</Link>
+                <CardTitle className="font-display text-base">{t('recentConversations', language)}</CardTitle>
+                <Link to="/assistant" className="text-xs text-accent hover:underline">{t('viewAll', language)}</Link>
               </div>
             </CardHeader>
             <CardContent className="space-y-3">
