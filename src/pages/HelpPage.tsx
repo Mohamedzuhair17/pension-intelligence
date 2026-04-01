@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { Search, HelpCircle, ChevronDown, ChevronUp, MessageSquare, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
 import { useAppStore } from '@/store/useAppStore';
@@ -22,7 +21,7 @@ const faqCategories = [
     titleKey: 'contributionsInvesting' as const,
     questions: [
       { q: 'What is the minimum contribution for NPS?', a: 'The minimum contribution for Tier I is ₹500 per contribution and ₹1,000 annually. For Tier II, the minimum is ₹250 per contribution with no annual minimum.' },
-      { q: 'What are the different fund types in NPS?', a: 'NPS offers multiple fund types: E (Equity), C (Corporate Bonds), G (Government Securities), and A (Alternative Investment). You can choose between Active Choice (where you decide allocation) and Auto Choice (lifecycle-based allocation).' },
+      { q: 'What are the different fund types in NPS?', a: 'NPS offers multiple fund types: E (Equity), C (Corporate Bonds), G (Government Securities), and A (Alternative Investment). You can choose between Active Choice and Auto Choice.' },
       { q: 'Can I change my fund allocation?', a: 'Yes, you can change your fund allocation up to 4 times in a financial year. Changes can be made online through the CRA website or through your POP.' },
     ],
   },
@@ -36,8 +35,8 @@ const faqCategories = [
   {
     titleKey: 'withdrawalsPension' as const,
     questions: [
-      { q: 'When can I withdraw from NPS?', a: 'Regular exit is at age 60. Premature exit is allowed after 5 years for specific reasons (illness, education, home purchase). Partial withdrawals up to 25% of own contributions are allowed after 3 years for specific purposes.' },
-      { q: 'How is the pension amount calculated?', a: 'The pension depends on: your total corpus at retirement, the annuity percentage (minimum 40%), and the annuity rate offered by the insurance company. A larger corpus and higher annuity percentage result in higher monthly pension.' },
+      { q: 'When can I withdraw from NPS?', a: 'Regular exit is at age 60. Premature exit is allowed after 5 years for specific reasons. Partial withdrawals up to 25% of own contributions are allowed after 3 years for specific purposes.' },
+      { q: 'How is the pension amount calculated?', a: 'The pension depends on: your total corpus at retirement, the annuity percentage (minimum 40%), and the annuity rate offered by the insurance company.' },
     ],
   },
 ];
@@ -48,33 +47,25 @@ export default function HelpPage() {
   const language = useAppStore((s) => s.language);
 
   const toggle = (key: string) => {
-    setOpenItems((prev) => {
-      const next = new Set(prev);
-      if (next.has(key)) next.delete(key);
-      else next.add(key);
-      return next;
-    });
+    setOpenItems((prev) => { const next = new Set(prev); next.has(key) ? next.delete(key) : next.add(key); return next; });
   };
 
   const filteredCategories = faqCategories.map((cat) => ({
     ...cat,
-    questions: cat.questions.filter(
-      (q) =>
-        q.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        q.a.toLowerCase().includes(searchQuery.toLowerCase())
-    ),
+    questions: cat.questions.filter((q) => q.q.toLowerCase().includes(searchQuery.toLowerCase()) || q.a.toLowerCase().includes(searchQuery.toLowerCase())),
   })).filter((cat) => cat.questions.length > 0);
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-4xl space-y-6">
       <div className="text-center py-8">
-        <div className="w-16 h-16 rounded-2xl gradient-accent flex items-center justify-center mx-auto mb-4">
-          <HelpCircle className="w-8 h-8 text-accent-foreground" />
+        <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center mx-auto mb-4"
+          style={{ boxShadow: '0 0 40px rgba(124,58,237,0.3)' }}>
+          <HelpCircle className="w-8 h-8 text-white" />
         </div>
-        <h1 className="font-display text-3xl font-bold text-foreground mb-2">{t('howCanWeHelp', language)}</h1>
-        <p className="text-muted-foreground mb-6">{t('searchFaqsOrAsk', language)}</p>
+        <h1 className="font-display text-3xl font-bold text-[var(--text-primary)] mb-2">{t('howCanWeHelp', language)}</h1>
+        <p className="text-[var(--text-secondary)] mb-6">{t('searchFaqsOrAsk', language)}</p>
         <div className="relative max-w-lg mx-auto">
-          <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
           <Input
             placeholder={t('searchFaqs', language)}
             value={searchQuery}
@@ -86,17 +77,22 @@ export default function HelpPage() {
 
       <div className="flex justify-center gap-3 mb-6">
         <Link to="/assistant">
-          <Button className="gradient-accent text-accent-foreground">
-            <MessageSquare className="w-4 h-4 mr-1.5" /> {t('askAIAssistant', language)}
-          </Button>
+          <button className="btn-gradient-purple px-5 py-2.5 text-sm flex items-center gap-2 rounded-xl">
+            <MessageSquare className="w-4 h-4" /> {t('askAIAssistant', language)}
+          </button>
         </Link>
-        <Button variant="outline">{t('submitFeedback', language)}</Button>
+        <button className="px-5 py-2.5 text-sm rounded-xl text-[var(--text-secondary)] transition-colors"
+          style={{ border: '1px solid rgba(255,255,255,0.08)' }}
+          onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(124,58,237,0.3)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}>
+          {t('submitFeedback', language)}
+        </button>
       </div>
 
       {filteredCategories.map((cat) => (
         <div key={cat.titleKey}>
-          <h2 className="font-display text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
-            <Badge variant="secondary" className="text-xs">{cat.questions.length}</Badge>
+          <h2 className="font-display text-lg font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
+            <Badge className="text-[9px] px-2 py-0.5 border-0 rounded-pill" style={{ background: 'rgba(124,58,237,0.12)', color: '#9D5CF6' }}>{cat.questions.length}</Badge>
             {t(cat.titleKey, language)}
           </h2>
           <div className="space-y-2 mb-6">
@@ -104,23 +100,33 @@ export default function HelpPage() {
               const key = cat.titleKey + faq.q;
               const isOpen = openItems.has(key);
               return (
-                <Card key={key} className="shadow-card">
-                  <button onClick={() => toggle(key)} className="w-full text-left p-4 flex items-center justify-between">
-                    <span className="text-sm font-medium text-foreground pr-4">{faq.q}</span>
-                    {isOpen ? <ChevronUp className="w-4 h-4 text-muted-foreground shrink-0" /> : <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />}
+                <div key={key} className="rounded-xl overflow-hidden" style={{ background: 'var(--bg-card)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  <button onClick={() => toggle(key)} className="w-full text-left p-4 flex items-center justify-between transition-colors"
+                    onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(124,58,237,0.04)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}>
+                    <span className="text-sm font-medium text-[var(--text-primary)] pr-4">{faq.q}</span>
+                    {isOpen ? <ChevronUp className="w-4 h-4 text-[var(--text-muted)] shrink-0" /> : <ChevronDown className="w-4 h-4 text-[var(--text-muted)] shrink-0" />}
                   </button>
                   {isOpen && (
-                    <CardContent className="pt-0 pb-4 px-4">
-                      <p className="text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
+                    <div className="pt-0 pb-4 px-4">
+                      <p className="text-sm text-[var(--text-secondary)] leading-relaxed">{faq.a}</p>
                       <div className="flex items-center gap-3 mt-3">
-                        <span className="text-xs text-muted-foreground">{t('wasThisHelpful', language)}</span>
-                        <button className="p-1 rounded hover:bg-secondary text-muted-foreground"><ThumbsUp className="w-3.5 h-3.5" /></button>
-                        <button className="p-1 rounded hover:bg-secondary text-muted-foreground"><ThumbsDown className="w-3.5 h-3.5" /></button>
-                        <Link to="/assistant" className="text-xs text-accent hover:underline ml-auto">{t('askAIForMore', language)}</Link>
+                        <span className="text-xs text-[var(--text-muted)]">{t('wasThisHelpful', language)}</span>
+                        <button className="p-1.5 rounded-lg text-[var(--text-muted)] transition-colors"
+                          onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(16,185,129,0.1)'; e.currentTarget.style.color = '#10B981'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-muted)'; }}>
+                          <ThumbsUp className="w-3.5 h-3.5" />
+                        </button>
+                        <button className="p-1.5 rounded-lg text-[var(--text-muted)] transition-colors"
+                          onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(239,68,68,0.1)'; e.currentTarget.style.color = '#EF4444'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-muted)'; }}>
+                          <ThumbsDown className="w-3.5 h-3.5" />
+                        </button>
+                        <Link to="/assistant" className="text-xs text-pp-purple hover:text-pp-purple-light transition-colors ml-auto">{t('askAIForMore', language)}</Link>
                       </div>
-                    </CardContent>
+                    </div>
                   )}
-                </Card>
+                </div>
               );
             })}
           </div>

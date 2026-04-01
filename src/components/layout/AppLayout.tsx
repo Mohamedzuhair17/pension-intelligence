@@ -1,5 +1,5 @@
 import { Outlet, Navigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import AppSidebar from './AppSidebar';
 import AppHeader from './AppHeader';
 import { useAppStore } from '@/store/useAppStore';
@@ -13,17 +13,27 @@ export default function AppLayout() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-surface)' }}>
       <AppSidebar />
       <motion.div
         initial={false}
-        animate={{ marginLeft: sidebarOpen ? 260 : 72 }}
-        transition={{ duration: 0.2, ease: 'easeInOut' }}
+        animate={{ marginLeft: sidebarOpen ? 240 : 64 }}
+        transition={{ duration: 0.25, ease: 'easeInOut' }}
         className="flex flex-col min-h-screen"
       >
         <AppHeader />
-        <main className="flex-1 p-6 overflow-auto">
-          <Outlet />
+        <main className="flex-1 p-6 lg:p-8 overflow-auto">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={undefined}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+            >
+              <Outlet />
+            </motion.div>
+          </AnimatePresence>
         </main>
       </motion.div>
     </div>

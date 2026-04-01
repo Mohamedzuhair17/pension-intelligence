@@ -12,7 +12,7 @@ const Index = () => {
     } else {
       navigate('/login');
     }
-  }, []);
+  }, [isAuthenticated, navigate]);
 
   return null;
 };

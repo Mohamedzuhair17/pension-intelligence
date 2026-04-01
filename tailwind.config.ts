@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
@@ -14,8 +15,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Space Grotesk', 'Inter', 'system-ui', 'sans-serif'],
+        sans: ['Sora', 'system-ui', 'sans-serif'],
+        display: ['Sora', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -51,6 +53,26 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Fintech palette
+        'pp-purple': {
+          DEFAULT: '#7C3AED',
+          light: '#9D5CF6',
+          dim: 'rgba(124,58,237,0.15)',
+        },
+        'pp-blue': {
+          DEFAULT: '#3B82F6',
+          light: '#60A5FA',
+          dim: 'rgba(59,130,246,0.15)',
+        },
+        'pp-teal': {
+          DEFAULT: '#14B8A6',
+          light: '#2DD4BF',
+          dim: 'rgba(20,184,166,0.15)',
+        },
+        'pp-success': '#10B981',
+        'pp-warning': '#F59E0B',
+        'pp-danger': '#EF4444',
+        // Legacy semantic mapping
         saffron: {
           DEFAULT: "hsl(var(--saffron))",
           light: "hsl(var(--saffron-light))",
@@ -86,6 +108,18 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        card: "16px",
+        button: "10px",
+        badge: "8px",
+        pill: "999px",
+      },
+      boxShadow: {
+        'card': '0 2px 8px rgba(0,0,0,0.4)',
+        'elevated': '0 4px 24px rgba(0,0,0,0.5)',
+        'heavy': '0 8px 40px rgba(0,0,0,0.6)',
+        'glow-purple': '0 0 20px rgba(124,58,237,0.3), 0 0 60px rgba(124,58,237,0.1)',
+        'glow-blue': '0 0 20px rgba(59,130,246,0.3)',
+        'glow-teal': '0 0 20px rgba(20,184,166,0.3)',
       },
       keyframes: {
         "accordion-down": {
@@ -108,6 +142,18 @@ export default {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.7" },
         },
+        "slide-up-fade": {
+          from: { opacity: "0", transform: "translateY(12px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+        "glow-pulse": {
+          "0%, 100%": { boxShadow: "0 0 20px rgba(124,58,237,0.2)" },
+          "50%": { boxShadow: "0 0 30px rgba(124,58,237,0.4)" },
+        },
+        "float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-6px)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -115,8 +161,11 @@ export default {
         "fade-in": "fade-in 0.4s ease-out",
         "slide-in-left": "slide-in-left 0.3s ease-out",
         "pulse-soft": "pulse-soft 2s ease-in-out infinite",
+        "slide-up-fade": "slide-up-fade 0.4s ease-out",
+        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
+        "float": "float 3s ease-in-out infinite",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate],
 } satisfies Config;
